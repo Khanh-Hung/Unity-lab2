@@ -10,6 +10,7 @@ public class Snowflake : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Player picked up Snowflake!");
             PlayerController player = collision.GetComponent<PlayerController>();
             if (player != null)
             {

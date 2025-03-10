@@ -67,7 +67,7 @@ public class GameOver : MonoBehaviour
    
     public void Options()
     {
-        SceneManager.LoadScene("Option");
+        SceneManager.LoadScene("Option2");
     }
 
     public void Quite()

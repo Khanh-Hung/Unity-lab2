@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,15 +9,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float torqueAmount = 1f;
     [SerializeField] float normalSpeed = 20f;
     [SerializeField] float boostSpeed = 40f;
-    [SerializeField] float jumpForce = 10f; 
-    [SerializeField] LayerMask groundLayer;
+    [SerializeField] float jumpForce = 10f;
+    [SerializeField] LayerMask groundLayer; // Đã được chỉnh thành "Ground" trong Inspector
+
     Rigidbody2D rb2d;
     public GameObject gameObject;
     SurfaceEffector2D surfaceEffector2D;
     bool canMove = true;
     bool isGrounded = false; 
     [SerializeField] Transform groundCheck; 
-    [SerializeField] float groundCheckRadius = 0.2f;
+    [SerializeField] float groundCheckRadius = 0.3f;
     public int score = 0;
     public TextMeshProUGUI textMeshProUGUI;
     
@@ -43,10 +44,23 @@ public class PlayerController : MonoBehaviour
             RespondToBoost();
             Jump(); 
         }
-
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        CheckGrounded(); // Kiểm tra chạm đất
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Space Pressed!");
+        }
+        void CheckGrounded()
+        {
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+            Debug.Log("Is Grounded: " + isGrounded);
+        }
+       
     }
-
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
     IEnumerator BoostSpeedForSeconds(float duration)
     {
         normalSpeed = 25f; 
@@ -94,7 +108,8 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb2d.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            Debug.Log("Jumping!");
+            rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x, jumpForce);
         }
     }
     void OnTriggerEnter2D(Collider2D collision)
